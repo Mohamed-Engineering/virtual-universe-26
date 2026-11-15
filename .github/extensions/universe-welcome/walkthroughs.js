@@ -1,170 +1,132 @@
-// Step-by-step guides opened by "Try this example" on the welcome canvas.
-// Block types: string = paragraph (HTML), {k:"term"|"chat"|"file"|"diff", label?, text}, {note}, {table:[[q,a],...]},
-// {fork:true} = the learner's fork status, {link:{href,text}} = a deep link button, {list:[text]} = bullet points.
-// Tokens filled from the learner's account: {login}, {fork}, {issue} (" 12" or ""), {pr}.
-// Chat blocks get an "Open in Copilot app" button that starts a session in the learner's fork.
+// Guides open immediately; chat blocks stay in the current session.
 window.WALK = {
 skills: {
   eyebrow: "SKILLS · GUIDE",
-  title: "Create and run your first skill",
-  time: "15 min",
-  intro: "A skill is a set of instructions, scripts, and resources that Copilot loads when needed to perform a specialized task.<br><br>In this guide you'll edit the <code>issue-to-pr</code> skill and then run it with a slash command.",
+  title: "Edit and run your first skill",
+  time: "8–10 min",
+  intro: "Teach Copilot how you want a job done. Edit one existing skill, then use it to turn a sample issue into a draft pull request. Keep this guide and the same working chat open.",
   steps: [
-    { h: "Understand how a skill is built", body: [
-      "By convention, each skill gets its own folder: <code>.github/skills/my-skill/</code>, with a Markdown file named <code>SKILL.md</code> inside it. Replace <code>my-skill</code> with a short name that says what the skill does, like <code>issue-to-pr</code>.",
-      "A <code>SKILL.md</code> file has two parts:",
-      { list: [
-        "<b>The YAML frontmatter</b>, between the two <code>---</code> lines at the top. The <b>name</b> becomes the skill's slash command, and the <b>description</b> tells Copilot when to use it.",
-        "<b>The body</b>, below the frontmatter. It lists the steps Copilot follows and the rules it must keep.",
-      ] },
-      "Here's what that looks like:",
-      { k: "file", label: ".github/skills/my-skill/SKILL.md", text: `---
-name: my-skill
-description: What the skill does and when to use it.
----
-
-# My skill
-1. The first thing to do
-2. The next thing to do
-
-## Rules
-- Something it must never do` },
-      { openSkill: true },
+    { h: "Ask Copilot to open the skill", body: [
+      "Start here in the session you already have. You can read the skill and try the documentation connector without a fork. There is nothing to reopen or switch to.",
+      "Select <b>Send to this chat</b> below to ask Copilot to open the existing skill for you.",
+      "The <code>name</code> in the file defines <code>/issue-to-pr</code>, the description explains when to use it, and the body describes its steps and boundaries.",
+      { k: "chat", text: "Open .github/skills/issue-to-pr/SKILL.md from this checkout in the editor and explain its name, description, and steps. Read only; do not fork, change files, or open a new session." },
     ]},
-    { h: "Edit the skill", body: [
-      "To create a new skill, you need to add a <code>skills</code> folder in the <code>.github</code> folder of your repo. In this guide you will edit a skill that already exists. Click the <code>&lt;&gt;</code> symbol in the file tab of the <code>SKILL.md</code> file you opened above to edit the file.",
-      "<b>Replace</b> the <code>gh pr create</code> line in step 6. You can delete step 6, click the <b>Copy</b> button and paste this in its place:",
-      { k: "diff", label: ".github/skills/issue-to-pr/SKILL.md", text: ` 6. Commit only the files you changed for this issue, push the branch to the
-    fork, and open a draft pull request that closes the issue:
--   \`gh pr create --draft --title "Fix #<n>: <issue title>" --body "Closes #<n>"\`
-+   \`gh pr create --draft --title "Fix #<n>: <issue title>" --body "<body>"\`
-+   Start the body with "Closes #<n>", then add a short summary and a
-+   "How to test" section with the exact commands a reviewer can run.` },
-      "This change makes every pull request explain how to test it.",
-      { list: [
-        "<b>Copy the prompt</b> below into this session's Copilot chat.",
-        "Copilot will use your existing fork of the tutorial repo, or create one if you don't have it yet.",
-      ] },
-      { k: "chat", noOpen: true, text: `Save my edited issue-to-pr skill to my fork of octodemo/virtual-universe-26:
-- Check GitHub access and help me sign in only if needed.
-- Find my fork: list the forks of octodemo/virtual-universe-26 and use the one owned by my personal GitHub account, even if it has a different name. Only create a fork if I don't have one. Don't treat an existing fork as a blocker.
-- Preserve my saved local edit to .github/skills/issue-to-pr/SKILL.md.
-- Commit only that skill change and push it to my fork's default branch. Do not publish any other local changes or push to the event repository.
-- Do not ask me to preview or confirm the destination before committing. Keep any required app permission prompts.
-- Verify that the commit and edited file are on my fork.
-- On success, reply only with a link to my fork and confirmation that the change was committed and pushed. If blocked, explain the problem instead of claiming success.` },
+    { h: "Ready to make changes?", body: [
+      "Only now do you need a fork: it is where your issue and pull request will live. Copilot can prepare that destination while keeping this session, checkout, and guide. Reuse your Section 1 fork if you have one.",
+      { k: "chat", text: "I'm ready to make changes. Help me prepare a fork destination in this same checkout. Inspect my branch, changes, and remotes. Reuse my existing fork or ask before creating one with gh repo fork octodemo/virtual-universe-26 --clone=false --default-branch-only. Verify its parent and my access. Ask before enabling issues or adding a workshop-fork remote. Preserve origin, existing remotes, and local work. Tell me the exact fork and remote we will target, and use them explicitly for GitHub commands and pushes. Do not open another session or clone." },
+      "Approve the proposed setup, then continue below. If you are only exploring, skip the editing steps and go to Tools & connectors—no fork is needed there.",
     ]},
-    { h: "Create a sample issue", body: [
-      "Give the skill something real to fix. This issue asks for a small feature in the <code>universe-notes</code> sample app.",
-      "<b>Copy and run</b> the command below in this session's Copilot chat. The <code>!</code> prefix lets you run Bash commands directly in chat.",
-      { k: "chat", noOpen: true, text: `!gh issue create -R {fork} --title "Add a list command to universe-notes" \\
-  --body "Add an npm script so 'npm run list' prints each keynote highlight title from universe-notes/notes/keynote-highlights.json, grouped by topic."` },
-      "The terminal will open to run the command. Note the issue number it prints. You can <b>click the issue link</b> to preview it, then <b>return to the Universe welcome canvas tab</b> to continue.",
+    { h: "Make one useful edit", body: [
+      "In the skill's draft-PR step, require a <b>How to test</b> section in the pull request body, alongside the issue-closing reference and summary. Save the file. You can edit it yourself or send this request:",
+      { k: "chat", text: "Update .github/skills/issue-to-pr/SKILL.md so every draft PR body includes Closes #<n>, a short summary, and a How to test section with exact commands. Show me the diff. Do not commit or push until I approve." },
+      "Keep the edit in this working session. Before running the skill, type <code>/skills reload</code> in chat so it picks up your change. If your build does not support that command, ask Copilot to reload skills rather than starting another session.",
     ]},
-    { h: "Run the skill with its slash command", body: [
-      "Run <code>/skills reload</code> first so Copilot picks up your edit.",
-      "Then run the skill on your newest issue. <b>Type</b> <code>/issue-to-pr{issue}</code> in this session's Copilot chat. As you type, the skill pops up in the slash command list. If you leave off the number, Copilot lists your open issues and asks which one.",
+    { h: "Create one sample issue", body: [
+      { k: "chat", text: "In my verified fork, propose an issue titled Add a list command to universe-notes. It should request an npm script so npm run list prints the titles from universe-notes/notes/keynote-highlights.json grouped by topic. Show the issue body and ask before creating it. Remember the exact issue number for this exercise." },
+      "Approve the issue after reviewing it. Keep its number; do not substitute the newest issue in your account.",
     ]},
-    { h: "Review the draft pull request", body: [
-      "Open the pull request link Copilot shares in chat and check that it has a <b>How to test</b> section.",
-      { note: "Leave the pull request open. You'll review it for security issues later in this section." },
+    { h: "Run the skill here", body: [
+      "Use the exact issue number from the previous step. The button sends the slash command to this chat; if a number is needed, Copilot asks you to choose.",
+      { k: "chat", text: "/issue-to-pr" },
+      "Review the proposed changes and approve committing and pushing when ready. Copilot should preserve your skill edit and leave the draft PR branch checked out for the review exercise.",
+    ]},
+    { h: "Check the result", body: [
+      "Open the exact draft PR linked in chat. Check its summary and <b>How to test</b> section, and run the listed commands. Leave the PR open and stay in this session.",
+      { note: "Success: one skill edit, one identified issue, one draft PR with reproducible checks. No merge is required." },
     ]},
   ],
-  done: "You edited a skill and ran it with a slash command. Next, give your agent more tools.",
+  done: "Your skill now explains how to test its work. Next, connect a public documentation source—no new account required.",
   next: "tools",
 },
-
 tools: {
-  eyebrow: "TOOLS · GUIDE",
-  title: "Give Copilot the right tools and context",
-  time: "10 min",
-  intro: "A connector gives Copilot access to tools and information it doesn't have built in.<br><br>APIs change, and Copilot's built-in knowledge may be out of date. Find a connector that looks up current documentation so your issue-to-pr skill can base its fixes on documented APIs and examples, with sources you can check.",
+  eyebrow: "TOOLS & CONNECTORS · GUIDE",
+  title: "Connect public documentation",
+  time: "5–7 min",
+  intro: "A skill teaches a job; tools add abilities; a connector gives tools access to a service. Use Microsoft Learn's public MCP server to retrieve documentation without a new account, API key, or paid subscription.",
   steps: [
-    { h: "Find the right tool with Agent Finder", body: [
-      "Describe your problem and let Agent Finder suggest a tool. <b>Copy the prompt</b> into this session's Copilot chat:",
-      { k: "chat", noOpen: true, text: `/agentfinder my coding agent uses outdated library APIs, find a tool that gives it current documentation` },
-      "Agent Finder only searches; it doesn't install anything. The top result should be <b>Context7</b>, an MCP server that looks up current library documentation.",
+    { h: "Discover with Agent Finder", body: [
+      "You can do this in your current session, including the event repository. No fork, repository switch, or issue is required.",
+      { k: "chat", text: "/agentfinder Find an MCP server for Microsoft's public documentation that requires no account or API key. Do not install anything." },
+      "Results vary. A relevance score measures the search match, not trust or safety. If Microsoft Learn is not listed, use the official reference below instead of choosing an unrelated result.",
+      { link: { href: "https://learn.microsoft.com/en-us/training/support/mcp", text: "Read Microsoft's server documentation" } },
     ]},
-    { h: "Add the suggested connector", body: [
-      { list: [
-        "On the left of your screen in the Copilot app, <b>click Customize</b> at the top of the sidebar that shows your sessions.",
-        "Use the search bar to <b>search for Context7</b>, the tool Agent Finder suggested. Select the server and <b>click Add server</b>.",
-        "<b>Select the HTTP tab</b> and accept the default settings presented.",
-        "<b>Return to this session's Universe welcome canvas tab</b> to continue.",
-      ] },
+    { h: "Review and add the connector", body: [
+      "This is an <b>MCP connector</b>, added through the app's MCP server settings—not a plugin or a new service account. It reads public documentation; it does not need your repository content.",
+      { k: "file", label: "Connection settings (not a repository file)", text: '{\n  "name": "microsoft-learn",\n  "type": "http",\n  "url": "https://learn.microsoft.com/api/mcp"\n}' },
+      { link: { href: "ghapp://mcp/install?%7B%22name%22%3A%22microsoft-learn%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Flearn.microsoft.com%2Fapi%2Fmcp%22%7D", text: "Review Microsoft Learn connection" } },
+      "The button opens the add-server form. Review the URL and choose <b>Add server</b>. If it is already connected, reuse it. Never paste credentials into the URL.",
+      { note: "If the link is unavailable in your build, open Customize → MCP and add the HTTP server using the settings above. Organization policy may restrict MCP servers; do not bypass it." },
     ]},
-    { h: "Try a documentation lookup", body: [
-      "<b>Copy the prompt</b> into this chat:",
-      { k: "chat", noOpen: true, text: `Use the Context7 MCP connector to find how Node.js reads a UTF-8 file with node:fs/promises. Show a short example and its documentation source. If the connector isn't available in this session, tell me; don't substitute web search.` },
-      "Look for a Context7 tool call and a linked Node.js source. The connector retrieves documentation; it doesn't certify that a PR is correct.",
+    { h: "Use the connector, not just install it", body: [
+      { k: "chat", text: "Use the Microsoft Learn MCP connector to find the introductory training on prompt engineering with GitHub Copilot. Summarize two tips I can use when asking Copilot to fix an issue, and cite the source link. Send only this public query, not repository content. Show which connector tool you used. If its tools are not available in this session, explain how to refresh or restart with my approval; do not substitute a web search and call the exercise complete." },
+      "Inspect the tool call and open a returned source link. You have connected an external knowledge source to the agent without signing in anywhere new.",
     ]},
-    { h: "Use it in your skill", body: [
-      "<b>Ask Copilot</b> to update the skill by copying this prompt into chat, or <b>edit it yourself</b> using the instructions below.",
-      { k: "chat", noOpen: true, text: `Update .github/skills/issue-to-pr/SKILL.md to use the Context7 connector when a fix needs library or API documentation. Send only public documentation queries, cite relevant sources in the draft PR, and report unavailable tools instead of pretending a lookup succeeded. Show me the edit; don't commit or push yet.` },
-      "To edit it yourself, <a href=\"#/tools\" data-open-skill>open the skill.md file here</a> <span data-open-skill-status role=\"status\"></span> and click the <code>&lt;&gt;</code> symbol. Add this instruction before the step that makes the fix, then save:",
-      { k: "file", label: "Add to .github/skills/issue-to-pr/SKILL.md", text: `When a fix needs library or API documentation, use the Context7 MCP
-connector to look it up. Send only public documentation queries, not
-repository contents. Cite relevant sources in the draft PR. If the
-connector is unavailable, report it instead of claiming the lookup
-succeeded.` },
+    { h: "Make the distinction", body: [
+      { table: [
+        ["Skill", "Instructions for doing the job: issue-to-pr."],
+        ["Connector", "Access to an external service: Microsoft Learn's public documentation."],
+        ["Plugin", "A package that may add tools, skills, agents, or canvases."],
+      ]},
+      "An authenticated connector, such as a team chat integration, additionally needs your permission to access that account. This exercise deliberately avoids that requirement.",
+      { note: "Success means a real connector tool call with relevant source links. If policy blocks installation, read the public docs to keep learning, but mark the connector exercise incomplete." },
+    ]},
+    { h: "Optional: explore CI/CD tools later", body: [
+      "For a longer exercise, use <code>/agentfinder find an agent that can help with CI/CD pipelines and GitHub Actions workflows</code>. Review <code>repo-actions-hub</code> if it appears, and approve installation only after inspecting its source. This is separate from connecting Microsoft Learn and is not required to finish today's flow.",
     ]},
   ],
-  done: "Your skill can now ask for current documentation. Next, review the draft PR for security issues.",
+  done: "You used a no-account connector to bring public documentation into your chat. Next, review your draft PR.",
   next: "security",
 },
-
 security: {
   eyebrow: "SECURITY REVIEW · GUIDE",
-  title: "Review the agent's work for security issues",
-  time: "10 min",
-  intro: "Copilot now has a built-in <code>/security-review</code> skill. The security review skill checks changed code and reports only vulnerabilities it is confident someone could exploit. In this guide you run it on the fix in the PR and make the review part of your skill.",
+  title: "Review your draft PR",
+  time: "4–5 min",
+  intro: "Stay in the working session from Skills. Review the exact PR you created, not whichever PR happens to be newest.",
   steps: [
-    { h: "Run the review on the fix in the PR", body: [
-      "Review the pull request the skill opened earlier.",
-      "<b>Copy the slash command</b> into this session's chat:",
-      { k: "chat", noOpen: true, text: `/security-review Review the last PR created by the issue-to-pr skill in this chat. Use the chat history to identify it and review the fix in that PR, not unrelated local changes. If the PR is unclear, ask me which one.` },
-      "The review shows findings in a table with the severity, file, lines, and confidence. No findings is a good result.",
+    { h: "Confirm the review target", body: [
+      { k: "chat", text: "Identify the exact draft PR and branch created in our Skills exercise. Confirm the fork, PR number, and current checkout before reviewing it. If the target is unclear, ask me. Do not switch branches over unsaved changes or choose the newest PR automatically." },
     ]},
-    { h: "Add the security review skill to your skill", body: [
-      "<b>Copy the prompt</b> into this session's chat. Copilot adds the review step to your skill and commits the change:",
-      { k: "chat", noOpen: true, text: `Update .github/skills/issue-to-pr/SKILL.md so it runs the built-in /security-review skill on its changes after making the fix and before committing and opening the pull request. Fix any HIGH or CRITICAL findings, and list any others in the pull request body. Renumber the following steps. Then commit only that file on the current branch with the message "Run security review in issue-to-pr".` },
-      "Open the <a href=\"#/security\" data-open-skill>skill.md file</a> <span data-open-skill-status role=\"status\"></span> to check the new step.",
+    { h: "Run the built-in review", body: [
+      { k: "chat", text: "/security-review" },
+      "Review the findings and their file/line references. No findings is a valid result; do not add an intentionally unsafe file just to manufacture a finding. Choose whether to apply any suggested fixes.",
     ]},
-    { h: "Run it on a new issue", body: [
-      "<b>Copy and run</b> this command in this session's Copilot chat to create a new issue. The <code>!</code> prefix runs it as a Bash command.",
-      { k: "chat", noOpen: true, text: `!gh issue create -R {fork} --title "Add a search command to universe-notes" \\
-  --body "Add 'npm run search -- <word>' that prints highlights whose title or summary contains the word."` },
-      "Then <b>type</b> <code>/issue-to-pr{issue}</code> in the chat to run your skill on it.",
-      "Copilot now runs the security review skill on its own change before it opens the pull request.",
+    { h: "Improve your skill (optional)", body: [
+      { k: "chat", text: "Propose an edit to issue-to-pr so it requests a security review before opening the draft PR and reports unresolved findings. Show the diff, preserve other work, and ask before committing or pushing." },
+      "Leave the PR open for human review. There is no reset or cleanup command to run.",
     ]},
   ],
-  done: "Your skill now checks its own work for security issues. Next, let a trigger start it for you.",
+  done: "You reviewed the agent's work without losing the working session. Next, explore a paused factory.",
   next: "automate",
 },
-
 automate: {
   eyebrow: "AUTOMATE · GUIDE",
-  title: "Turn your skill into an Automation",
-  time: "5 min",
-  intro: "Save your skill as an automation so you can run it again without rewriting the prompt. You can schedule it for a certain time, but for this tutorial you'll trigger it manually.",
+  title: "Prepare a paused software factory",
+  time: "5–8 min",
+  intro: "A factory can start work from an event instead of a chat message. Configure it in this same session and keep it paused while you review its scope.",
+  preview: "Software factories are in preview. Availability and labels depend on your account and app version.",
   steps: [
-    { h: "Create an automation", body: [
-      "<b>Open Automations</b> in the app sidebar and <b>click New Automation</b>.",
-      "Give it a name, such as <code>Issue to PR</code>. Under <b>Trigger</b>, choose <b>Manual</b>. You can choose a scheduled time later.",
+    { h: "Understand the three parts", body: [
+      { table: [
+        ["Worker", "Runs the job, such as responding to an issue with a draft PR."],
+        ["Assessment", "Collects evidence about outcomes."],
+        ["Improvement", "Proposes changes for a person to approve."],
+      ]},
     ]},
-    { h: "Select your project and skill", body: [
-      "<b>Click the project selector</b> below the prompt box, marked by the green arrow, and select <b>your fork of virtual-universe-26</b>, not <code>octodemo/virtual-universe-26</code>.",
-      { img: { src: "new-automation.png", alt: "New automation form. The green arrow points to the project selector below the prompt box.", projectArrow: true } },
-      "The screenshot shows the event repository and a Daily trigger. For this tutorial, use <b>your fork</b> and <b>Manual</b> instead.",
-      "<b>Type <code>/issue-to-pr</code></b> in the prompt box and select the skill suggestion. Make sure the selected project has your updated skill.",
-      "<b>Copy this text</b> after the skill in the automation's prompt box:",
-      { k: "chat", label: "Automation prompt", noOpen: true, text: `Find the oldest open issue in this fork that has no linked pull request and use this skill to propose a fix. Notify me when the PR is ready to be reviewed to be merged.` },
+    { h: "Check the source before creating", body: [
+      { k: "chat", text: "Check whether the issue-to-pr skill edits from this exercise are committed, pushed, and available on my fork's default branch. Do not merge or switch branches automatically. If the edits are only in our open PR, explain that the factory will not use them from the default branch yet; I can review and merge that PR myself or defer factory creation." },
+      "A local edit or an unmerged PR is not automatically the version a cloud worker will run. Keep the factory exercise paused if its source is not ready.",
     ]},
-    { h: "Save and run when ready", body: [
-      "<b>Click Create</b> to save the automation. With a Manual trigger, it won't run until you start it.",
-      "When you're ready, <b>click the play button</b> on the automation. Follow its run and review the draft PR it produces; nothing should merge without your review.",
+    { h: "Create only after review", body: [
+      "A factory uses the app's project binding, not just your Git push remote. If this session still belongs to the event project, keep this step as a plan for later; do not create a factory there or reopen the app automatically.",
+      { k: "chat", text: "/factory-creator Plan an issue-to-pr factory for my verified fork. First verify the app's resolved repository target, not only my Git remotes. If this session is bound to the event repository, stop at a plan for later without switching sessions or creating resources. Otherwise propose a new-issue trigger, branches and draft PRs only, no merges, and require actor write access. Explain the source and tools, ask before creating, and keep the worker and scheduled assessment paused." },
+      "Review the repository, permissions, source, and trigger. Choose the create-only option, not create-and-enable. Do not assume the local documentation connector is available to the cloud worker.",
+    ]},
+    { h: "Optional: try one run later", body: [
+      "When the source is ready, explicitly approve enabling the worker and create one synthetic issue in your fork. Inspect its resulting session and draft PR, then pause the worker. Do not enable recurring assessments merely to finish this exercise.",
+      { k: "chat", text: "Show the current enabled state of my workshop factory and ask before changing it. I want it paused when I finish." },
     ]},
   ],
-  done: "🎉 <b>Congratulations on completing this tutorial!</b><br><br>You built an <code>issue-to-pr</code> skill that turns an issue into a draft pull request. You connected Context7 so it uses current documentation, added the built-in <code>/security-review</code> skill so it checks its own work, and saved it as an automation you can run on demand.<br><br>For more resources, visit the <a href=\"https://github.com/octodemo/virtual-universe-26\" target=\"_blank\" rel=\"noopener\">Virtual Universe '26 repository</a>.",
+  done: "You edited a skill, used a public connector, reviewed a draft PR, and explored automation with human approval.",
 },
 };
