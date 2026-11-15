@@ -1,0 +1,11 @@
+{
+  "name": "virtual-universe-26-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node --check hydra-saas/app.js",
+    "test": "node --test tests/*.mjs"
+  },
+  "engines": { "node": ">=18" }
+}
