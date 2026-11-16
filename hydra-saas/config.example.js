@@ -1,5 +1,5 @@
 window.HYDRA_CONFIG = {
-  // Set this to the HTTPS origin of the private Hydra API after deployment.
-  apiBase: "",
+  // Public origin only; secrets remain in the private Hydra WebDev runtime.
+  apiBase: "https://hydra-api-cl-bhktf8fq.manus.space",
   environment: "sandbox"
 };
